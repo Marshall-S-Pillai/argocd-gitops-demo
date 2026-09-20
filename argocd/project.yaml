@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: demo
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Lab project for Minikube and AKS GitOps demo
+  sourceRepos:
+    - https://github.com/Marshall-S-Pillai/argocd-gitops-demo.git
+  destinations:
+    - namespace: demo
+      server: https://kubernetes.default.svc
+    - namespace: springboot
+      server: https://kubernetes.default.svc
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-demo
+  labels:
+    app: springboot-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springboot-demo
+  template:
+    metadata:
+      labels:
+        app: springboot-demo
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/marshall-s-pillai/java-docker-gha-practice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-demo
+  labels:
+    app: springboot-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: springboot-demo
+  ports:
+    - port: 80
+      targetPort: 8080
+      name: http
